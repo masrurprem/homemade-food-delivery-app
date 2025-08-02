@@ -6,12 +6,13 @@ const auth = require("../middleware/auth");
 // getting all registered users
 userRoute.get("/all", async (req, res) => {
   try {
-    const allusers = await userModel.find({});
-    if (!allusers) {
+    const allUsers = await userModel.find({});
+    if (!allUsers) {
       res.status(404).send("users not found");
     }
     res.status(200).send(allUsers);
   } catch (err) {
+    console.log(err);
     res.status(400).send("something went wrong", err);
   }
 });
@@ -21,9 +22,10 @@ userRoute.post("/register", async (req, res) => {
   const user = new userModel(req.body);
   try {
     await user.save();
-    const token = await generateAuthToken();
+    const token = await user.generateAuthToken();
     res.status(200).send({ user, token });
   } catch (e) {
+    console.log(e);
     res.status(401).send("cannot register.. try again");
   }
 });
@@ -35,9 +37,10 @@ userRoute.post("/login", async (req, res) => {
     const { email, password } = req.body;
     const user = await userModel.findByCredentials(email, password);
     // generate user jwt auth token
-    const token = await generateAuthToken();
+    const token = await user.generateAuthToken();
     res.status(200).send({ user, token });
   } catch (e) {
+    console.log(e);
     res.status(400).send("something went wrong");
   }
 });
