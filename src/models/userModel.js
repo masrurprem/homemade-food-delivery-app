@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const validator = require("validator");
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -39,16 +39,18 @@ const userSchema = new mongoose.Schema(
 // adding password hashing middleware before saving to database
 userSchema.pre("save", async function (next) {
   const user = this;
+  console.log(this);
   if (user.isModified("password")) {
     //hash the password
-    user.password = bcrypt.hash(user.password, 10);
+    user.password = await bcrypt.hash(user.password, 10);
   }
   next();
 });
 
 // the auth method for user instance
-userSchema.methods.generateAuthToken = async () => {
+userSchema.methods.generateAuthToken = async function () {
   const user = this;
+  console.log("this refer", this);
   const token = jwt.sign({ email: user.email }, "abcabcabc");
   user.tokens = user.tokens.concat({ token: token });
   await user.save();
@@ -69,11 +71,13 @@ userSchema.methods.toJSON = function () {
 userSchema.statics.findByCredentials = async (email, password) => {
   // get user by email
   const user = await userModel.findOne({ email });
+  console.log(user);
   if (!user) {
     throw new Error("unable to login");
   }
   // pasword match
   const is_match = await bcrypt.compare(password, user.password);
+  console.log(is_match);
   if (!is_match) {
     throw new Error("unable to login");
   }
