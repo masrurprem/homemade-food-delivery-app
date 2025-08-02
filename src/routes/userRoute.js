@@ -17,7 +17,7 @@ userRoute.get("/all", async (req, res) => {
 });
 
 //creating new user
-userRoute.post("/users/register", async (req, res) => {
+userRoute.post("/register", async (req, res) => {
   const user = new userModel(req.body);
   try {
     await user.save();
@@ -29,7 +29,7 @@ userRoute.post("/users/register", async (req, res) => {
 });
 
 // user login route
-userRoute.post("/users/login", async (req, res) => {
+userRoute.post("/login", async (req, res) => {
   try {
     // fetch user by credentials
     const { email, password } = req.body;
@@ -43,12 +43,12 @@ userRoute.post("/users/login", async (req, res) => {
 });
 
 // getting only one user profile
-userRoute.get("/users/profile", auth, async (req, res) => {
+userRoute.get("/profile", auth, async (req, res) => {
   res.send(req.user);
 });
 
 // logout route: say logout from one current device
-userRoute.post("/users/logout", auth, async (req, res) => {
+userRoute.post("/logout", auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((tokenObj) => {
       return tokenObj.token !== req.token;
@@ -62,7 +62,7 @@ userRoute.post("/users/logout", auth, async (req, res) => {
 });
 
 //logout from all logged-in devices
-userRoute.post("/users/logoutAll", auth, async (req, res) => {
+userRoute.post("/logoutAll", auth, async (req, res) => {
   try {
     req.user.tokens = []; // all tokens are removed
     await req.user.save();
