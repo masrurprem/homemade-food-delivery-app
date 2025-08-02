@@ -4,7 +4,7 @@ const userModel = require("../models/userModel");
 const auth = require("../middleware/auth");
 
 // getting all registered users
-userRoute.get("/users/all", async (req, res) => {
+userRoute.get("/all", async (req, res) => {
   try {
     const allusers = await userModel.find({});
     if (!allusers) {

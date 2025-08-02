@@ -4,9 +4,8 @@ const vendorRoute = require("./routes/vendorRoute");
 const foodRouter = require("./routes/foodRoute");
 const catRouter = require("./routes/categoryRoute");
 const registerRouter = require("./routes/registerRoute");
-const loginRoute = require("./routes/loginRoute");
+// const loginRoute = require("./routes/loginRoute");
 require("./database/mongoDB");
-
 const app = express();
 const port = process.env.PORT || 3000;
 //
@@ -16,12 +15,12 @@ app.use("/vendors", vendorRoute);
 app.use("/foods", foodRouter);
 app.use("/categories", catRouter);
 app.use(registerRouter);
-app.use(loginRoute);
+// app.use(loginRoute);
 
 // listen
 app.listen(port, (error) => {
   if (error) {
     console.log("error running server");
   }
-  console.log("server running at port", port);
+  console.log("server running at port", `http://localhost:${port}`);
 });

@@ -3,7 +3,7 @@ const vendorRoute = express.Router();
 const vendorModel = require("../models/vendorModel");
 
 // getting all the registered vendors
-vendorRoute.get("/vendors/all", async (req, res) => {
+vendorRoute.get("/all", async (req, res) => {
   try {
     const allVendor = vendorModel.find({});
     res.status(200).send(allVendor);
@@ -13,7 +13,7 @@ vendorRoute.get("/vendors/all", async (req, res) => {
 });
 
 // register to create a new vendor
-userRoute.post("/vendors/register", (req, res) => {
+vendorRoute.post("/register", (req, res) => {
   const { businessName, email, password } = req.body;
   // hash the password
   bcrypt.hash(password, 10, async (err, hash) => {
