@@ -12,4 +12,16 @@ foodRouter.get("/all", async (req, res) => {
   }
 });
 
+// create new food
+foodRouter.post("/addNew", async (req, res) => {
+  const newFood = new foodModel(req.body);
+  try {
+    await newFood.save();
+    res.status(200).send("Food Saved!");
+  } catch (e) {
+    console.log(e);
+    res.status(401).send("Something went wrong , try again");
+  }
+});
+
 module.exports = foodRouter;

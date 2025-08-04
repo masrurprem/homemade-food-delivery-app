@@ -58,7 +58,7 @@ userRoute.post("/logout", auth, async (req, res) => {
     });
     //save user to database
     await req.user.save();
-    res.send();
+    res.send("Successfully Logout");
   } catch (e) {
     res.status(500).send();
   }
