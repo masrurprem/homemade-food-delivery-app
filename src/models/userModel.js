@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
 // adding password hashing middleware before saving to database
 userSchema.pre("save", async function (next) {
   const user = this;
-  console.log(this);
+  //console.log(this);
   if (user.isModified("password")) {
     //hash the password
     user.password = await bcrypt.hash(user.password, 10);
@@ -50,7 +50,7 @@ userSchema.pre("save", async function (next) {
 // the auth method for user instance
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
-  console.log("this refer", this);
+  //console.log("this refer", this);
   const token = jwt.sign({ email: user.email }, "abcabcabc");
   user.tokens = user.tokens.concat({ token: token });
   await user.save();

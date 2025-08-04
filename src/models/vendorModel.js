@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const vendorSchema = new mongoose.Schema(
   {
@@ -21,6 +22,14 @@ const vendorSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
@@ -40,6 +49,15 @@ vendorSchema.statics.findByVenCredentials = async (email, password) => {
     throw new Error("unable to login");
   }
   return vendor;
+};
+
+// token generation function for a vendor instance
+vendorSchema.methods.generateAuthToken = async function () {
+  const vendor = this;
+  const token = jwt.sign({ email: vendor.email }, "abcabcabc");
+  vendor.tokens = vendor.tokens.concat({ token: token });
+  await vendor.save();
+  return token;
 };
 
 //
