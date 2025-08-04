@@ -23,7 +23,7 @@ userRoute.post("/register", async (req, res) => {
   const user = new userModel(req.body);
   try {
     await user.save();
-    sendWelcomEmail(user.name, user.email);
+    await sendWelcomEmail(user.name, user.email);
     const token = await user.generateAuthToken();
     res.status(200).send({ user, token });
   } catch (e) {
