@@ -2,6 +2,7 @@ const express = require("express");
 const vendorRoute = express.Router();
 const vendorModel = require("../models/vendorModel");
 const vendorAuth = require("../middleware/vendorAuth");
+const { vendorWelcomEmail } = require("../email/vendorEmail");
 
 // getting all the registered vendors--> most likely for admin panel
 vendorRoute.get("/all", async (req, res) => {
@@ -18,6 +19,7 @@ vendorRoute.post("/register", async (req, res) => {
   const newVendor = new vendorModel(req.body);
   try {
     await newVendor.save();
+    vendorWelcomEmail(newVendor.businessName, newVendor.email);
     res.status(200).send("vendor registration complete");
   } catch (e) {
     res.status(400).send("unable to create new vendor");
