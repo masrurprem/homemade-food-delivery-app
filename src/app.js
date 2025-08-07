@@ -4,6 +4,7 @@ const vendorRoute = require("./routes/vendorRoute");
 const foodRouter = require("./routes/foodRoute");
 const catRouter = require("./routes/categoryRoute");
 const registerRouter = require("./routes/registerRoute");
+const searchRouter = require("./routes/searchRoute");
 // const loginRoute = require("./routes/loginRoute");
 require("./database/mongoDB");
 const app = express();
@@ -14,6 +15,7 @@ app.use("/users", userRoute);
 app.use("/vendors", vendorRoute);
 app.use("/foods", foodRouter);
 app.use("/categories", catRouter);
+app.use("/search", searchRouter);
 app.use(registerRouter);
 // app.use(loginRoute);
 
