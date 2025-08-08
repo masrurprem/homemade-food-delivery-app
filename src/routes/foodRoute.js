@@ -4,8 +4,25 @@ const foodRouter = express.Router();
 
 // getting all the foods irrespective of categories
 foodRouter.get("/all", async (req, res) => {
+  // necessary for pagination
+  const page = req.query.page || 1;
+  const limit = req.query.limit || 5;
+  const skip = (page - 1) * limit;
+  //necessary for sorting: sortBy--> price(high to low)
+  let sortOps = {};
+  if (req.query.sortBy) {
+    const parts = req.query.sortBy.split(":");
+    sortOps[parts[0]] = parts[1] === "desc" ? -1 : 1;
+  }
+
   try {
-    const foods = await foodModel.find({}); // all foods
+    // all foods with pagination
+    const foods = await foodModel
+      .find({})
+      .populate("category")
+      .skip(skip)
+      .limit(limit)
+      .sort(sortOps);
     res.status(200).send(foods);
   } catch (err) {
     res.status(400).send(err);

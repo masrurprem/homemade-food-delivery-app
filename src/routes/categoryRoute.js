@@ -3,6 +3,19 @@ const catRouter = express.Router();
 const foodModel = require("../models/foodModel");
 const categoryModel = require("../models/categoryModel");
 
+//getting existing categories
+catRouter.get("/all", async (req, res) => {
+  try {
+    const cats = await categoryModel.find({});
+    if (!cats) {
+      res.status(404).send("no categories for now");
+    }
+    res.status(200).send(cats);
+  } catch (e) {
+    res.status(404).send("error getting categories");
+  }
+});
+
 // get all foods of a specific category
 catRouter.get("/:name", async (req, res) => {
   try {
