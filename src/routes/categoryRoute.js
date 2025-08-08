@@ -18,6 +18,17 @@ catRouter.get("/all", async (req, res) => {
 
 // get all foods of a specific category
 catRouter.get("/:name", async (req, res) => {
+  //pagination
+  const page = req.query.page || 1;
+  const limit = req.query.limit || 5;
+  const skip = (page - 1) * limit;
+  //sorting -> by price
+  let sortOps = {};
+  if (req.query.sortBy) {
+    const parts = req.query.sortBy.split(":");
+    sortOps[parts[0]] = parts[1] === "desc" ? -1 : 1;
+  }
+
   try {
     // get the category
     const Category = await categoryModel.findOne({
@@ -27,7 +38,12 @@ catRouter.get("/:name", async (req, res) => {
       res.status(400).send("category not found");
     }
     // find all foods of Category
-    const foods = await foodModel.find({ category: Category._id });
+    const foods = await foodModel
+      .find({ category: Category._id })
+      .populate("category")
+      .skip(skip)
+      .limit(limit)
+      .sort(sortOps);
     if (!foods) {
       res.status(500).send("no availabe food in the category");
     }

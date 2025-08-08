@@ -8,7 +8,7 @@ foodRouter.get("/all", async (req, res) => {
   const page = req.query.page || 1;
   const limit = req.query.limit || 5;
   const skip = (page - 1) * limit;
-  //necessary for sorting: sortBy--> price(high to low)
+  //necessary for sorting: sortBy--> price
   let sortOps = {};
   if (req.query.sortBy) {
     const parts = req.query.sortBy.split(":");
@@ -40,5 +40,9 @@ foodRouter.post("/addNew", async (req, res) => {
     res.status(401).send("Something went wrong , try again");
   }
 });
+
+//update food
+
+// delete a food item
 
 module.exports = foodRouter;
