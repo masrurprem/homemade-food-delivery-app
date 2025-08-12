@@ -5,8 +5,8 @@ const foodRouter = express.Router();
 // getting all the foods irrespective of categories
 foodRouter.get("/all", async (req, res) => {
   // necessary for pagination
-  const page = req.query.page || 1;
-  const limit = req.query.limit || 5;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 5;
   const skip = (page - 1) * limit;
   //necessary for sorting: sortBy--> price
   let sortOps = {};
