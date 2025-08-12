@@ -19,8 +19,8 @@ catRouter.get("/all", async (req, res) => {
 // get all foods of a specific category
 catRouter.get("/:name", async (req, res) => {
   //pagination
-  const page = req.query.page || 1;
-  const limit = req.query.limit || 5;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 5;
   const skip = (page - 1) * limit;
   //sorting -> by price
   let sortOps = {};
