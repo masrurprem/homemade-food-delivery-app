@@ -41,9 +41,9 @@ catRouter.get("/:name", async (req, res) => {
     const foods = await foodModel
       .find({ category: Category._id })
       .populate("category")
+      .sort(sortOps)
       .skip(skip)
-      .limit(limit)
-      .sort(sortOps);
+      .limit(limit);
     if (!foods) {
       res.status(500).send("no availabe food in the category");
     }
